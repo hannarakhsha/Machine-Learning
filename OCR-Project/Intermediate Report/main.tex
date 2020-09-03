@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Intermediate Project Report on Optical Character Recognition}
+\author{Hanna Rakhsha \and Ram Moore \and Samantha Aziz}
+\date{November 1, 2019}
+
+\usepackage{natbib}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+In the past 20 years products like Adobe Acrobat and Google Drive have made major advancements in optical character recognition (frequently abbreviated as OCR).
+Most OCRs come out at around 98 to 99 percent accuracy on a full page of translation. \cite{Council}
+This incredible feat still manages to come with a few problems.
+One of the problems with OCR software is that over a large set of documents the missed characters start to add up.
+Moreover, documents that are worse quality or have hard-to-read fonts risk almost a 30 percent difference in accuracy. \cite{Holley} \newline
+We have been provided with a 140,000 page data set of document scans from a WHO (World Health Organization) database.
+Much of the text has been read using OCR software, but due to a combination of poor quality scans and possible unusual typewriter fonts, the OCR software is unusable and the text, unsearchable.
+
+\section{Description of the Data Being Used}
+The data set we are hoping to use is given to us by Dr. Louie Valencia, a Texas State University history professor.
+His hope is to further research in the AIDS/HIV epidemic around Europe through the 80s and 90s.
+This set contains 1,376 documents, with around 100 pages per document, putting the total data set at around 137,600 pages.
+The content of this material range from AIDS research funding requests to reports of tests and research already being done.
+The pages also contain a combination of poor quality scans and unusual typewriter fonts, resulting in standard OCRs to have issues reading the text.
+
+
+\section{What We Have Done so Far}
+\subsection {Defined the problem space}
+Dr. Valencia previously mentioned his current OCR software fails to detect the names of countries, which eliminates his ability to efficiently search through his data set. Because this OCR software is closed-source, we have attempted to observe its shortcomings by identifying patterns in its failure to correctly process scanned documents. Namely:
+\begin{enumerate}
+    \item The current OCR software often misses text that is smaller than average (assumed to be 12 point font for the purposes of this report). This is a general problem, but it contributes to the already high failure rate for country names.
+    \item The current OCR software appears to only analyze text within a the middle-center of the page. However, a country's name can appear in regions outside of this area, including the top/bottom margins of the page.
+    This is not a problem easily fixed with the current OCR solution but we can easily fix this in our solution.
+\end{enumerate}{}
+
+\subsection {Identified possible solutions}
+Based on our theoretical knowledge of various machine learning implementations, we have identified strategies that would be appropriate for solving the problems outlined above. Because OCR is a classification problem, we have determined that logistic regression is the most appropriate machine learning implementation to use. We also predict that using a convolutional neural network (CNN) may address both points in our problem space, as CNNs can detect patterns (including country names) that appear in multiple regions of an image (in this case, a page of scanned text).
+To address the problem of missing text in the presence of noise, it is necessary to come up with a way to make our new OCR noise-tolerant. Recent studies suggest that deep learning algorithms can be made more robust by manually correcting results from unclean/noisy data samples in the training set \cite{Song}. By "helping" the algorithm detect text in the presence of noise, it becomes possible to increase the number of training samples available and reduce the amount of noise-related faults in the testing data.
+
+\section{What Remains to be Done}
+Going forward our group plans to implement two different algorithmic approaches using convolutional neural networks and logistic regression.
+Early on we ruled out the use of linear regression because we identified our problem as a classification problem, where linear regression would not be useful.
+Our current plan is as follows:
+\begin{enumerate}
+    \item Develop and implement a convolutional neural network algorithm.
+    \item Develop and implement a logistic regression algorithm.
+    \item Test each algorithm on our data set.
+    \item Compare the results of each solution.
+\end{enumerate}
+
+We will combine the best elements of existing algorithms into a robust application.
+This will help address:
+\begin{enumerate}
+    \item Missed text that is considered smaller than average by OCR software.
+    \item Missed text because its located outside of the expected regions. In other words, text missed because its located outside the 1 inch margins.
+    \item Missed short strings because they are located in a large block of text.
+\end{enumerate}
+
+
+We plan on running our dataset on a more established pdf OCR software, \href{https://github.com/tesseract-ocr/tesseract}{Tesseract}\cite{Tesseract}. We will then compare these results to those from our Machine Learning approach to determine if using Machine Learning was actually helpful or if we can call the document OCR problem already solved for this dataset.
+
+To determine the better result in all comparisons we will find which algorithm's output text has the most hits for country names as this is what is needed most from our dataset.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
